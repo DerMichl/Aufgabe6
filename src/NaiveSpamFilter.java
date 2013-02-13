@@ -15,7 +15,7 @@ public class NaiveSpamFilter
 		long startTime = System.currentTimeMillis();
 		if (args[0].equals("learn"))
 		{
-			NaiveMailCorpus hamCorpus = new NaiveMailCorpus(new File(args[2]), true, "ham");
+			NaiveMailCorpus hamCorpus = new NaiveMailCorpus(new File(args[1]), true, "ham");
 			//NaiveMailCorpus spamCorpus = new NaiveMailCorpus(new File(args[1]), true, "spam");
 
 			hamCorpus.writeModel(new File(args[2] + "//..//modelham"));
@@ -26,7 +26,7 @@ public class NaiveSpamFilter
 		}
 		else if (args[0].equals("classify"))
 		{
-			NaiveMailCorpus hamCorpus = new NaiveMailCorpus(new File(args[2] + "//..//modelham"), false, "ham");
+			NaiveMailCorpus hamCorpus = new NaiveMailCorpus(new File(args[1] + "//..//modelham"), false, "ham");
 			//NaiveMailCorpus spamCorpus = new NaiveMailCorpus(new File(args[2] + "//..//modelspam"), false, "spam");
 
 

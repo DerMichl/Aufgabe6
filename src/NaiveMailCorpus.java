@@ -89,6 +89,7 @@ public class NaiveMailCorpus
 			for (char c : word.toCharArray())
 				outputStream.writeChar(c);
 			outputStream.writeInt(entry.getValue());
+			System.out.println(word + "  :  " + entry.getValue());
 		}
 	}
 
@@ -106,7 +107,9 @@ public class NaiveMailCorpus
 			for (int j = 0; j < strLength; j++) {
 				chars[j] = inputStream.readChar();
 			}
-			corpus.put(String.valueOf(chars), inputStream.readInt());
+			int value = inputStream.readInt();
+			corpus.put(String.valueOf(chars), value);
+			System.out.println(String.valueOf(chars) + "  :  " + value);
 		}
 	}
 }
