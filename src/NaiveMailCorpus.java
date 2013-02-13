@@ -15,10 +15,18 @@ public class NaiveMailCorpus
 	HashMap<String, Integer> corpus = new HashMap<String, Integer>();
 	//HashMap<String, Integer> spamCorpus = new HashMap<String, Integer>();
 
-	public NaiveMailCorpus(File path) throws IOException
+	public NaiveMailCorpus(File path, boolean train, String category) throws IOException
 	{
-		read(path);
+		if (train)
+		{
+			read(path);
+		}
+		else
+		{
+			readModel(path);
+		}
 	}
+
 
 	private void read(File path) throws IOException
 	{
@@ -63,25 +71,42 @@ public class NaiveMailCorpus
 		}
 	}
 
-	public void writeModel(File path) throws FileNotFoundException
+	public void writeModel(File file) throws IOException
 	{
-		// Ham-Model schreiben
+		// Model schreiben
 		DataOutputStream outputStream;
-		outputStream = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(path + "//modelham")));
-		Iterator i = corpus.entrySet().iterator();
-		Map.Entry entry;
-		try {
-			while (i.hasNext())
-			{
-				entry = (Map.Entry) i.next();
-				Helper.writeString(outputStream, "hallo");
-				System.out.println(entry.getKey() + "  :  " + corpus.get(entry.getKey()));
-			}
-		}
-		catch (IOException e)
+		outputStream = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(file)));
+		outputStream.writeInt(corpus.size());
+		System.out.println(corpus.size());
+		int i = 0;
+		for (Map.Entry<String, Integer> entry : corpus.entrySet())
 		{
-			e.printStackTrace();
+			i++;
+			System.out.println(i);
+			//Helper.writeString(outputStream, "hallo");
+			String word = entry.getKey();
+			outputStream.writeInt(word.length());
+			for (char c : word.toCharArray())
+				outputStream.writeChar(c);
+			outputStream.writeInt(entry.getValue());
 		}
+	}
 
+	public void readModel(File file) throws IOException
+	{
+		// Model lesen
+		DataInputStream inputStream;
+		inputStream = new DataInputStream(new FileInputStream(file));
+		int size = inputStream.readInt();
+		System.out.println(size);
+		for (int i = 0; i < size; i++) {
+			System.out.println(i);
+			int strLength = inputStream.readInt();
+			char[] chars = new char[strLength];
+			for (int j = 0; j < strLength; j++) {
+				chars[j] = inputStream.readChar();
+			}
+			corpus.put(String.valueOf(chars), inputStream.readInt());
+		}
 	}
 }
